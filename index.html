@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Выборы</title>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/animate.css">
 </head>
 <body>
 	<!-- Main Page -->
@@ -59,17 +60,17 @@
 	</div>
 
 	<!-- Popup -->
-	<div class="overlay">
+	<div class="overlay animated">
 	 		<div class="popup">
 				<div class="popup-title">не доволен прошедшими выборами?</div>
 				<div class="popup-subtitle">создай своего кандидата</div>
-				<button id="popup-btn" class="popup-btn">создать</button>
+				<button id="popup-btn" class="popup-btn animated tada">создать</button>
 	 		</div>
 	</div>
 
 	<!-- Customization -->
 	<div class="custom">
-		<div class="custom-info">
+		<div class="custom-info animated fadeInLeftBig">
 			<label for="name">Фамилия Имя Отчество</label>
 			<input type="text" id="name">
 			<label for="age">Возраст, лет</label>
@@ -89,7 +90,7 @@
 			<textarea name="bio" id="bio" cols="40" rows="8"></textarea>
 		</div>
 
-		<div class="custom-char">
+		<div class="custom-char animated bounceInDown">
 			<div class="person construct">
 				<div id="person-skin" class="person-skin"></div>
 				<div id="person-clothes" class="person-clothes"></div>
@@ -99,7 +100,7 @@
 			<div id="ready" class="btn">готово</div>
 		</div>
 
-		<div class="custom-style">
+		<div class="custom-style animated fadeInRightBig">
 			<div class="style-text">
 				Выберите цвет кожи
 			</div>
@@ -150,6 +151,6 @@
 			</div>
 		</div>
 	</div>
-
+<script src="js/script.js"></script>
 </body>
 </html>
