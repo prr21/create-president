@@ -72,9 +72,9 @@
 	<div class="custom">
 		<div class="custom-info animated fadeInLeftBig">
 			<label for="name">Фамилия Имя Отчество</label>
-			<input type="text" id="name" value="петр иванов васильевич">
+			<input type="text" id="name">
 			<label for="age">Возраст, лет</label>
-			<input type="text" id="age" value="56">
+			<input type="text" id="age">
 			<div class="radio">
 				<input value="Мужской" id="male" checked name="sex" type="radio">
 				<label for="sex">Мужчина</label>
@@ -82,13 +82,15 @@
 				<label for="sex">Женщина</label>
 			</div>
 			<select id="select">
+				<option selected disabled>Выберите полит.взгляды</option>
 				<option value="Либеральные">Либеральные</option>
 				<option value="Левые">Левые</option>
 				<option value="Правые">Правые</option>
 			</select>	
 			<label for="bio">Биография</label>
-			<textarea name="bio" id="bio" cols="40" rows="8">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere quam totam, minus cumque, recusandae esse fugiat. Quisquam necessitatibus voluptatibus ea unde culpa, voluptates nostrum numquam et. Alias provident qui laboriosam!</textarea>
+			<textarea name="bio" id="bio" cols="40" rows="8"></textarea>
 		</div>
+		<div class="error-input"></div>
 
 		<div class="custom-char animated bounceInDown">
 			<div class="person construct">
@@ -106,7 +108,7 @@
 			</div>
 			<div class="skin">
 				<div class="prev flaticon-left-arrow flaticon-left-arrow"></div>
-					<div class="skin-color skin-color-1"></div>
+					<div class="skin-color skin-color-1 showStyle"></div>
 					<div class="skin-color skin-color-2"></div>
 					<div class="skin-color skin-color-3"></div>
 				<div class="next flaticon-right-arrow"></div>
@@ -116,12 +118,9 @@
 			</div>
 			<div class="hair">
 				<div class="prev flaticon-left-arrow"></div>
-					<div class="hair-style hair-style-1"></div>
+					<div class="hair-style hair-style-1 showStyle"></div>
 					<div class="hair-style hair-style-2"></div>
 					<div class="hair-style hair-style-3"></div>
-					<div class="hair-style hair-style-4"></div>
-					<div class="hair-style hair-style-5"></div>
-					<div class="hair-style hair-style-6"></div>
 				<div class="next flaticon-right-arrow"></div>
 			</div>
 			<div class="style-text">
@@ -129,12 +128,9 @@
 			</div>
 			<div class="clothes">
 				<div class="prev flaticon-left-arrow"></div>
-					<div class="clothes-style clothes-style-1"></div>
+					<div class="clothes-style clothes-style-1 showStyle"></div>
 					<div class="clothes-style clothes-style-2"></div>
 					<div class="clothes-style clothes-style-3"></div>
-					<div class="clothes-style clothes-style-4"></div>
-					<div class="clothes-style clothes-style-5"></div>
-					<div class="clothes-style clothes-style-6"></div>
 				<div class="next flaticon-right-arrow"></div>
 			</div>
 		</div>
