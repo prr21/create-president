@@ -347,6 +347,17 @@
   background-color: #191e25;
   background-image: linear-gradient(to right, #262b35 0%, #2f3540 100%);
 }
+.error-input{
+  display: none;
+  padding: 10px;
+  position: absolute;
+  left: 420px;
+  max-width: 150px;
+  height: auto;
+  background-color: rgba(214, 0, 0, 0.05);
+  border: 2px solid rgba(214, 18, 39, 0.8);
+  border-radius: 5%;
+}
 
 .custom-info label {
   display: block;
@@ -446,6 +457,7 @@
 }
 
 .custom-char .person-clothes {
+  display: none;
   position: absolute;
   margin-top: 30px;
   left: 50%;
@@ -457,6 +469,7 @@
 }
 
 .custom-char .person-hair {
+  display: none;
   position: absolute;
   margin-top: 30px;
   left: 50%;
@@ -541,8 +554,10 @@
 }
 
 .custom-style .skin-color-1,
+.custom-style .skin-color-4,
 .custom-style .hair-color-1,
 .custom-style .clothes-color-1 {
+  display: none;
   width: 160px;
   height: 80px;
   border-radius: 10px;
@@ -550,6 +565,7 @@
 }
 
 .custom-style .skin-color-2,
+.custom-style .skin-color-5,
 .custom-style .hair-color-2,
 .custom-style .clothes-color-2 {
   display: none;
@@ -560,6 +576,7 @@
 }
 
 .custom-style .skin-color-3,
+.custom-style .skin-color-6,
 .custom-style .hair-color-3,
 .custom-style .clothes-color-3 {
   display: none;
@@ -570,6 +587,7 @@
 }
 
 .custom-style .hair-style-1 {
+  display: none;
   width: 160px;
   height: 80px;
   background: #f2f2f2 url("../img/hair/slide/hair-1.png") center no-repeat;
@@ -623,6 +641,7 @@
 }
 
 .custom-style .clothes-style-1 {
+  display: none;
   width: 160px;
   height: 80px;
   background: #aeaeae url("../img/clothes/slide/clothes-1.png") center no-repeat;
@@ -673,6 +692,10 @@
   background: #aeaeae url("../img/clothes/slide/clothes-6.png") center no-repeat;
   background-size: 20%;
   border-radius: 10px;
+}
+
+.showStyle {
+  display: block !important;
 }
 
 .errorInp {
