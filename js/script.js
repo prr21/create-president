@@ -27,21 +27,22 @@ var re = /^[А-Яа-яЁё0-9 ]+$/,
 	error = document.getElementsByClassName('error-input')[0],
 
 // Main Page
-	ageDiv = document.getElementsByClassName('age')[0],
-	sexDiv = document.getElementsByClassName('sex')[0],
-	viewsDiv = document.getElementsByClassName('views')[0],
-	bioDiv = document.getElementsByClassName('bio')[0],
-
-	skinColor = document.getElementsByClassName('skin-color'),
-	hairStyle = document.getElementsByClassName('hair-style'),
-	clothesStyle = document.getElementsByClassName('clothes-style'),
+	looks = ['skin-color', 'hair-style', 'clothes-style'],
 
 // Slider's
 	skinDiv = document.getElementsByClassName('skin')[0],
 	hairDiv = document.getElementsByClassName('hair')[0],
 	clothesDiv = document.getElementsByClassName('clothes')[0],
 
-	president = {};
+// Cards
+	mainCards = document.getElementsByClassName('main-cards')[0],
+	cardItem = document.getElementsByClassName('main-cards-item')[0],
+
+
+	candidant = {
+		sex: male.checked ? male.value : female.value,
+		look: {}
+	};
 
 // перенаправление к созданию президента
 create.onclick = function() {
@@ -62,23 +63,10 @@ nameInp.addEventListener('change', function(){
 		error.textContent = 'Вводите только русские буквы';
 
 	} else {
-		let fullName = this.value.split(' ');
+		this.classList.remove('errorInp');
+		error.style.display = 'none';
 
-		if (fullName.length != 3) {
-			error.style.display = 'block';
-			error.textContent = 'Введите Фамилию, Имя и Отчество';
-			this.classList.add('errorInp');
-
-		} else {
-			this.classList.remove('errorInp');
-			error.style.display = 'none';
-			this.value = null;
-
-			for (let i = 0; i < fullName.length; i++) {
-				this.value += fullName[i][0].toUpperCase() + fullName[i].slice(1) + ' ';
-			}
-			president.name = this.value;
-		};
+		candidant.name = this.value;
 	};
 });
 
@@ -102,21 +90,21 @@ ageInp.addEventListener('change', function(){
 	} else {
 		this.classList.remove('errorInp');
 		error.style.display = 'none';
-		president.age = +this.value;
+		candidant.age = +this.value;
 	};
 });
 
 // Установка пола
-radioSex.addEventListener('click', function(event){
+radioSex.addEventListener('click', (event) => {
 	if (event.target.tagName == 'INPUT') {
-		president.sex = male.checked ? male.value : female.value;
-		changeBody(president.sex);
+		candidant.sex = male.checked ? male.value : female.value;
+		changeBody(candidant.sex);
 	}	
 }) 
 
 // Политические взгляды
 selectInp.addEventListener('change', function(){
-	president.views = this.options[this.selectedIndex].value;
+	candidant.views = this.options[this.selectedIndex].value;
 });
 
 // Проверка биографии
@@ -134,34 +122,35 @@ bioInp.addEventListener('change', function(){
 	} else {
 		this.classList.remove('errorInp');
 		error.style.display = 'none';
-		president.bio = this.value;
+		candidant.bio = this.value;
 	};
 });
 
 // Сменить тело
 function changeBody(body){
-	var remI = 0,
-		addI = 0;
+	for (let i = 0; i < looks.length; i++){
+		let partLook =  document.getElementsByClassName(looks[i]);
+		var remI = 0, addI = 0;
 
-	body == 'Женский' ? (remI = 1, addI = hairStyle.length + 1) : (remI = hairStyle.length + 1, addI = 1);
+		if (body == 'Женский') {
+			remI = 1; addI = partLook.length + 1;
 
-	for (let i = 0; i < hairStyle.length; i++) {
+		} else {
+			remI = partLook.length + 1; addI = 1;
+		};
 
-		skinColor[i].classList.remove('skin-color-' + (remI));
-		hairStyle[i].classList.remove('hair-style-' + (remI));
-		clothesStyle[i].classList.remove('clothes-style-' + (remI));
+		for (let j = 0; j < partLook.length; j++) {
 
-		skinColor[i].classList.add('skin-color-' + (addI));
-		hairStyle[i].classList.add('hair-style-' + (addI));
-		clothesStyle[i].classList.add('clothes-style-' + (addI));
-
-		remI ++; addI ++;
+			partLook[j].classList.remove(looks[i] + '-' + (remI));
+			partLook[j].classList.add(looks[i] + '-' + (addI));
+			remI ++; addI ++;
+		};
 	};
-	changeUp()
+	changeUp();
 }
 
 // Слайдер 
-customStyle.addEventListener('click', function(event){
+customStyle.addEventListener('click', (event) => {
 	var e = event.target;
 
 	if ( e.classList.contains('prev')) {
@@ -206,7 +195,6 @@ function changeUp() {
 
 	for (let i = 0; i < showStyle.length; i++) {
 
-
 		let num = showStyle[i].classList.value.match(/\d+/g),
 			key = showStyle[i].classList[0].split('-')[0],
 			person = document.getElementsByClassName(`person-${key}`)[0];
@@ -218,26 +206,62 @@ function changeUp() {
 			var keySrc = `img/${key}/${key}-${num}.png`
 		}
 
-		president[key] = `${key}-${num}.png`
+		person = person.style.cssText = `display: block; background: url(${keySrc}) center center / cover no-repeat;`
 
-		person.style.cssText = `
-		display: block;
-		background: url(${keySrc}) center no-repeat;
-		background-size: cover;`
+		candidant.look[key] = person;
 	};
 };
 
-ready.addEventListener('click', function(){
+// Создать карточку своего кандидата
+function createCard(obj){
+	let newCardItem = cardItem.cloneNode(true),
+		photo = newCardItem.getElementsByClassName('photo')[0],
+		name = newCardItem.getElementsByClassName('name')[0],
+		age = newCardItem.getElementsByClassName('age')[0],
+		sex = newCardItem.getElementsByClassName('sex')[0],
+		views = newCardItem.getElementsByClassName('views')[0],
+		bio = newCardItem.getElementsByClassName('bio')[0];
+
+		photo.classList.remove('photo-1');
+		photo.classList.add('photo', 'person', 'construct');
+
+		for (let key in obj.look) {
+			let div = document.createElement('div');
+
+			div.style.cssText = obj.look[key];
+			div.classList.add(`person-${key}`)
+			photo.appendChild(div);
+		};
+
+		name.textContent = candidant.name;
+		age.textContent = candidant.age + ' лет';
+		sex.textContent = candidant.sex;
+		views.textContent = candidant.views;
+		bio.textContent = candidant.bio;
+
+	mainCards.appendChild(newCardItem);
+}
+
+ready.onclick = function(){
 	var keys = 0;
-	for (let key in president) {
+	for (let key in candidant) {
 		keys++;
 	};
 
-	if (keys < 8) {
+	if (keys < 6) {
 		error.textContent = 'Введите все данные';
 		error.style.display = 'block'
 
 	} else {
 		error.style.display = 'none';
-	}
-})
+
+		customInfo.style.display = ' none';
+		custom.style.display = ' none';
+		customStyle.style.display = ' none';
+		customChar.style.display = ' none';
+
+		main.style.display = '';
+
+		createCard(candidant);	
+	};
+};
