@@ -1,6 +1,6 @@
 'use strict'
 
-var re = /^[А-Яа-яЁё0-9 ]+$/,
+var re = /^[А-Яа-яЁё 0-9]+$/,
 
 // Btn's
 	create = document.getElementById('popup-btn'),
@@ -21,7 +21,7 @@ var re = /^[А-Яа-яЁё0-9 ]+$/,
 	nameInp = document.getElementById('name'),
 	ageInp = document.getElementById('age'),
 	radioSex = document.getElementsByClassName('radio')[0],
-	selectInp = document.getElementById('select'),
+	viewsInp = document.getElementById('select'),
 	bioInp = document.getElementById('bio'),
 
 	error = document.getElementsByClassName('error-input')[0],
@@ -38,7 +38,7 @@ var re = /^[А-Яа-яЁё0-9 ]+$/,
 	mainCards = document.getElementsByClassName('main-cards')[0],
 	cardItem = document.getElementsByClassName('main-cards-item')[0],
 
-
+	fails = [nameInp, ageInp, radioSex, viewsInp, bioInp],
 	candidant = {
 		sex: male.checked ? male.value : female.value,
 		look: {}
@@ -55,6 +55,18 @@ create.onclick = function() {
 	customChar.style.display = 'block';
 };
 
+// Удаление ошибки
+function removeFail(){
+	let index = fails.indexOf(this);
+	if(index != -1) fails.splice(index, 1);;
+}
+
+// Добавление ошибки
+function addFail(){
+	let index = fails.indexOf(this);
+	if(index == -1) fails.push(this);
+}
+
 // Проверка ФИО
 nameInp.addEventListener('change', function(){
 	if ( !re.test(this.value) || this.value == '') {
@@ -62,10 +74,13 @@ nameInp.addEventListener('change', function(){
 		error.style.display = 'block';
 		error.textContent = 'Вводите только русские буквы';
 
+		addFail.call(this)
+
 	} else {
 		this.classList.remove('errorInp');
 		error.style.display = 'none';
-
+		
+		removeFail.call(this);
 		candidant.name = this.value;
 	};
 });
@@ -77,34 +92,48 @@ ageInp.addEventListener('change', function(){
 		error.style.display = 'block';
 		error.textContent = 'Введите возвраст';
 
+		addFail.call(this)
+
 	} else if ( +this.value > 90) {
 		this.classList.add('errorInp');
 		error.style.display = 'block';
 		error.textContent = 'Вы дед';
+
+		addFail.call(this)
 
 	} else if (+this.value < 35) {
 		this.classList.add('errorInp');
 		error.style.display = 'block';
 		error.textContent = 'Вы малой';
 
+		addFail.call(this)
+
 	} else {
 		this.classList.remove('errorInp');
 		error.style.display = 'none';
+
+		removeFail.call(this);
 		candidant.age = +this.value;
 	};
 });
 
 // Установка пола
-radioSex.addEventListener('click', (event) => {
+radioSex.addEventListener('click', function(event) {
 	if (event.target.tagName == 'INPUT') {
 		candidant.sex = male.checked ? male.value : female.value;
+
+		this.classList.remove('errorInp');
+		removeFail.call(this);
 		changeBody(candidant.sex);
 	}	
 }) 
 
 // Политические взгляды
-selectInp.addEventListener('change', function(){
+viewsInp.addEventListener('change', function(){
 	candidant.views = this.options[this.selectedIndex].value;
+
+	this.classList.remove('errorInp');
+	removeFail.call(this);
 });
 
 // Проверка биографии
@@ -114,14 +143,20 @@ bioInp.addEventListener('change', function(){
 		error.style.display = 'block';
 		error.textContent = 'Вводите только русские буквы';
 
+		addFail.call(this)
+
 	} else if (this.value.length < 40) {
 		this.classList.add('errorInp');
 		error.style.display = 'block';
 		error.textContent = 'Напишите биографию в более чем 40 символов';
 
+		addFail.call(this)
+
 	} else {
 		this.classList.remove('errorInp');
 		error.style.display = 'none';
+
+		removeFail.call(this);
 		candidant.bio = this.value;
 	};
 });
@@ -175,6 +210,9 @@ function slideOn(slides, step) {
 			slides[i].classList.remove('showStyle')
 			var curSlide = i + step;
 			break;
+
+		} else {
+			curSlide = 1;
 		};
 	};
 
@@ -243,13 +281,26 @@ function createCard(obj){
 }
 
 ready.onclick = function(){
-	var keys = 0;
+	var keys = 0,
+		lookKey = 0;
+
 	for (let key in candidant) {
 		keys++;
 	};
+	for (let key in candidant.look) {
+		lookKey++;
+	}
 
-	if (keys < 6) {
-		error.textContent = 'Введите все данные';
+	if (false) {
+		for (var i = 0; i < fails.length; i++) {
+			fails[i].classList.add('errorInp');
+		};
+
+		error.innerHTML = 'Введите корректно все данные';
+		error.style.display = 'block'
+
+	} else if (lookKey < 3) {
+		error.innerHTML = 'Кандидант не может выступать в таком виде!';
 		error.style.display = 'block'
 
 	} else {
