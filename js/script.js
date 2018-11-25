@@ -37,6 +37,7 @@ var re = /^[А-Яа-яЁё 0-9]+$/,
 // Cards
 	mainCards = document.getElementsByClassName('main-cards')[0],
 	cardItem = document.getElementsByClassName('main-cards-item')[0],
+	newCardItem = cardItem.cloneNode(true),
 
 	fails = [nameInp, ageInp, radioSex, viewsInp, bioInp],
 	candidant = {
@@ -213,6 +214,7 @@ function slideOn(slides, step) {
 
 		} else {
 			curSlide = 1;
+			slides[0].style.display = 'none';
 		};
 	};
 
@@ -235,7 +237,7 @@ function changeUp() {
 
 		let num = showStyle[i].classList.value.match(/\d+/g),
 			key = showStyle[i].classList[0].split('-')[0],
-			person = document.getElementsByClassName(`person-${key}`)[0];
+			person = document.getElementById(`person-${key}`);
 
 		if (key != 'skin') {
 			var keySrc = `img/${key}/construct/${key}-${num}.png`
@@ -252,8 +254,7 @@ function changeUp() {
 
 // Создать карточку своего кандидата
 function createCard(obj){
-	let newCardItem = cardItem.cloneNode(true),
-		photo = newCardItem.getElementsByClassName('photo')[0],
+	let photo = newCardItem.getElementsByClassName('photo')[0],
 		name = newCardItem.getElementsByClassName('name')[0],
 		age = newCardItem.getElementsByClassName('age')[0],
 		sex = newCardItem.getElementsByClassName('sex')[0],
@@ -278,6 +279,21 @@ function createCard(obj){
 		bio.textContent = candidant.bio;
 
 	mainCards.appendChild(newCardItem);
+};
+
+// Удалить предыдущего кандидата
+function deletePreviosCandidant(){
+	let personStyle = document.getElementById('person-skin'),
+		personClothes = document.getElementById('person-clothes'),
+		personHair = document.getElementById('person-hair');
+
+		console.log(personStyle)
+
+	personStyle.style.cssText = ''
+	personClothes.style.cssText = ''
+	personHair.style.cssText = ''
+
+	mainCards.removeChild(newCardItem)
 }
 
 ready.onclick = function(){
@@ -291,7 +307,7 @@ ready.onclick = function(){
 		lookKey++;
 	}
 
-	if (false) {
+	if (keys < 6) {
 		for (var i = 0; i < fails.length; i++) {
 			fails[i].classList.add('errorInp');
 		};
@@ -315,4 +331,19 @@ ready.onclick = function(){
 
 		createCard(candidant);	
 	};
+};
+
+reset.onclick = function() {
+	nameInp.value = null;
+	ageInp.value = null;
+	bioInp.value = null;
+
+	deletePreviosCandidant();
+
+	main.style.display = 'none';
+
+	custom.style.display = 'flex';
+	customInfo.style.display = 'block';
+	customStyle.style.display = 'block';
+	customChar.style.display = 'block';
 };
