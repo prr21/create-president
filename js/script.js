@@ -1,12 +1,12 @@
 'use strict'
 
-var re = /^[А-Яа-яЁё 0-9]+$/,
+var re = /^[А-Яа-яЁё,. 0-9]+$/,
 
 // Btn's
 	create = document.getElementById('popup-btn'),
+	ready = document.getElementById('ready'),
 	reset = document.getElementById('reset'),
 	voting = document.getElementById('voting'),
-	ready = document.getElementById('ready'),
 	crime = document.getElementById('crime'),
 	overlay = document.getElementsByClassName('overlay')[0],
 
@@ -29,17 +29,11 @@ var re = /^[А-Яа-яЁё 0-9]+$/,
 // Main Page
 	looks = ['skin-color', 'hair-style', 'clothes-style'],
 
-// Slider's
-	skinDiv = document.getElementsByClassName('skin')[0],
-	hairDiv = document.getElementsByClassName('hair')[0],
-	clothesDiv = document.getElementsByClassName('clothes')[0],
-
 // Cards
 	mainCards = document.getElementsByClassName('main-cards')[0],
-	cardItem = document.getElementsByClassName('main-cards-item')[0],
-	newCardItem = cardItem.cloneNode(true),
+	cardItems = document.getElementsByClassName('main-cards-item'),
 
-	fails = [nameInp, ageInp, radioSex, viewsInp, bioInp],
+	fails = [nameInp, ageInp, viewsInp, bioInp],
 	candidant = {
 		sex: male.checked ? male.value : female.value,
 		look: {}
@@ -213,8 +207,7 @@ function slideOn(slides, step) {
 			break;
 
 		} else {
-			curSlide = 1;
-			slides[0].style.display = 'none';
+			curSlide = 0;
 		};
 	};
 
@@ -254,29 +247,30 @@ function changeUp() {
 
 // Создать карточку своего кандидата
 function createCard(obj){
-	let photo = newCardItem.getElementsByClassName('photo')[0],
+	let newCardItem = cardItems[0].cloneNode(true),
+		photo = newCardItem.getElementsByClassName('photo')[0],
 		name = newCardItem.getElementsByClassName('name')[0],
 		age = newCardItem.getElementsByClassName('age')[0],
 		sex = newCardItem.getElementsByClassName('sex')[0],
 		views = newCardItem.getElementsByClassName('views')[0],
 		bio = newCardItem.getElementsByClassName('bio')[0];
 
-		photo.classList.remove('photo-1');
-		photo.classList.add('photo', 'person', 'construct');
+	photo.classList.remove('photo-1');
+	photo.classList.add('photo', 'person', 'construct');
 
-		for (let key in obj.look) {
-			let div = document.createElement('div');
+	for (let key in obj.look) {
+		let div = document.createElement('div');
 
-			div.style.cssText = obj.look[key];
-			div.classList.add(`person-${key}`)
-			photo.appendChild(div);
-		};
+		div.style.cssText = obj.look[key];
+		div.classList.add(`person-${key}`)
+		photo.appendChild(div);
+	};
 
-		name.textContent = candidant.name;
-		age.textContent = candidant.age + ' лет';
-		sex.textContent = candidant.sex;
-		views.textContent = candidant.views;
-		bio.textContent = candidant.bio;
+	name.textContent = candidant.name;
+	age.textContent = candidant.age + ' лет';
+	sex.textContent = candidant.sex;
+	views.textContent = candidant.views;
+	bio.textContent = candidant.bio;
 
 	mainCards.appendChild(newCardItem);
 };
@@ -287,15 +281,24 @@ function deletePreviosCandidant(){
 		personClothes = document.getElementById('person-clothes'),
 		personHair = document.getElementById('person-hair');
 
-		console.log(personStyle)
+	nameInp.value = null;
+	ageInp.value = null;
+	bioInp.value = null;
+	viewsInp.selectedIndex = 0;
 
-	personStyle.style.cssText = ''
-	personClothes.style.cssText = ''
-	personHair.style.cssText = ''
+	fails = [nameInp, ageInp, viewsInp, bioInp];
+	candidant = { 
+		look: {},
+		sex: male.checked ? male.value : female.value
+	};
 
-	mainCards.removeChild(newCardItem)
+	personClothes.style.cssText = '';
+	personHair.style.cssText = '';	
+
+	mainCards.removeChild(cardItems[2])
 }
 
+// Готовность кандидата
 ready.onclick = function(){
 	var keys = 0,
 		lookKey = 0;
@@ -314,10 +317,12 @@ ready.onclick = function(){
 
 		error.innerHTML = 'Введите корректно все данные';
 		error.style.display = 'block'
+		window.scrollTo(0,0);
 
 	} else if (lookKey < 3) {
 		error.innerHTML = 'Кандидант не может выступать в таком виде!';
 		error.style.display = 'block'
+		window.scrollTo(0,0);
 
 	} else {
 		error.style.display = 'none';
@@ -333,12 +338,19 @@ ready.onclick = function(){
 	};
 };
 
+// Сбросить результаты
 reset.onclick = function() {
-	nameInp.value = null;
-	ageInp.value = null;
-	bioInp.value = null;
-
 	deletePreviosCandidant();
+
+	for (let i = 0; i < cardItems.length; i++) {
+		cardItems[i].classList.remove('main-cards-item-active')
+
+		let progBar = cardItems[i].getElementsByClassName('progress-bar')[0],
+			resCount = cardItems[i].getElementsByClassName('result-count')[0];
+
+		progBar.style.height = 0 + '%';
+		resCount.textContent = 0 + '%';
+	};
 
 	main.style.display = 'none';
 
@@ -346,4 +358,44 @@ reset.onclick = function() {
 	customInfo.style.display = 'block';
 	customStyle.style.display = 'block';
 	customChar.style.display = 'block';
+};
+
+// Честные выборы
+voting.onclick = function(){
+	makeVoting(true);
+};
+
+// Нечестные выборы
+crime.onclick = function(){
+	makeVoting(false);
+};
+
+// Провести выборы
+function makeVoting(bool){
+	let results = new Object(), crime = 0;
+
+	bool ? crime = 0 : crime = 25;
+
+	results.perSent0 = 18;
+	results.perSent1 = 20;
+	results.perSent2 = 16 + crime;
+
+	let winner, biggestTotal = results.perSent0;
+
+	for (let i = 0; i < cardItems.length; i++) {
+		cardItems[i].classList.remove('main-cards-item-active')
+
+		let progBar = cardItems[i].getElementsByClassName('progress-bar')[0],
+			resCount = cardItems[i].getElementsByClassName('result-count')[0],
+			total = results['perSent' + i];
+
+		progBar.style.height = total + '%';
+		resCount.textContent = total + '%';
+
+		if (biggestTotal < total) {
+			biggestTotal = total;
+			winner = cardItems[i];
+		};
+	};
+	winner.classList.add('main-cards-item-active')
 };
