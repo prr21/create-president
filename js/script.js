@@ -170,7 +170,6 @@ function changeBody(body){
 		};
 
 		for (let j = 0; j < partLook.length; j++) {
-
 			partLook[j].classList.remove(looks[i] + '-' + (remI));
 			partLook[j].classList.add(looks[i] + '-' + (addI));
 			remI ++; addI ++;
@@ -240,7 +239,6 @@ function changeUp() {
 		}
 
 		person = person.style.cssText = `display: block; background: url(${keySrc}) center center / cover no-repeat;`
-
 		candidant.look[key] = person;
 	};
 };
@@ -310,7 +308,7 @@ ready.onclick = function(){
 		lookKey++;
 	}
 
-	if (keys < 6) {
+	if (false) {
 		for (var i = 0; i < fails.length; i++) {
 			fails[i].classList.add('errorInp');
 		};
@@ -319,7 +317,7 @@ ready.onclick = function(){
 		error.style.display = 'block'
 		window.scrollTo(0,0);
 
-	} else if (lookKey < 3) {
+	} else if (false) {
 		error.innerHTML = 'Кандидант не может выступать в таком виде!';
 		error.style.display = 'block'
 		window.scrollTo(0,0);
@@ -376,11 +374,14 @@ function makeVoting(bool){
 
 	bool ? crime = 0 : crime = 25;
 
-	results.perSent0 = 18;
-	results.perSent1 = 20;
-	results.perSent2 = 16 + crime;
+	do {results.perSent2 = Math.round( Math.random() * 50 ) + crime;
 
-	let winner, biggestTotal = results.perSent0;
+	} while (results.perSent2 > 65 && results.perSent2 < 10);
+
+	results.perSent0 = Math.round( (100 - results.perSent2) * Math.random() );
+	results.perSent1 = Math.round( 100 - (results.perSent0 + results.perSent2) );
+
+	let winner = cardItems[0], biggestTotal = results.perSent0;
 
 	for (let i = 0; i < cardItems.length; i++) {
 		cardItems[i].classList.remove('main-cards-item-active')
