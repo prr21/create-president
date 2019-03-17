@@ -308,16 +308,15 @@ ready.onclick = function(){
 		lookKey++;
 	}
 
-	if (false) {
+	if (keys != 6) {
 		for (var i = 0; i < fails.length; i++) {
 			fails[i].classList.add('errorInp');
 		};
-
 		error.innerHTML = 'Введите корректно все данные';
 		error.style.display = 'block'
 		window.scrollTo(0,0);
 
-	} else if (false) {
+	} else if (lookKey != 3) {
 		error.innerHTML = 'Кандидант не может выступать в таком виде!';
 		error.style.display = 'block'
 		window.scrollTo(0,0);
